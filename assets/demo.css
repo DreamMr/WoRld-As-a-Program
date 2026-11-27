@@ -1,0 +1,380 @@
+.demo-card { container: demo / inline-size; }
+
+.demo-card h3 {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.demo-source {
+  width: min(100%, 45rem);
+  margin-inline: auto;
+}
+
+.demo-source h3 { margin-bottom: 0.85rem; }
+
+.demo-geometry, .demo-tasks {
+  margin-top: clamp(2.2rem, 5vw, 3.8rem);
+  padding-top: clamp(1.4rem, 3.4vw, 2.6rem);
+  border-top: 1px solid var(--line);
+}
+
+.frame-player {
+  min-width: 0;
+}
+
+.frame-screen, .geometry-screen {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: #07070c;
+}
+
+.frame-screen:focus, .geometry-screen:focus-within,
+:is(.reasoning-scroll, .reasoning-code pre, .marked-frame-list):focus-visible,
+.demo-card :is(button, input):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.frame-screen {
+  aspect-ratio: 1296 / 968;
+  cursor: ns-resize;
+}
+
+.frame-screen video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.frame-status, #geometry-status {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: #08080dd4;
+  color: var(--text);
+  text-align: center;
+  pointer-events: none;
+}
+
+.frame-status[hidden], #geometry-status[hidden] { display: none; }
+
+.frame-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.7rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: var(--panel);
+}
+
+.frame-controls input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 1.5rem;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.frame-controls output {
+  flex: 0 0 8ch;
+  color: var(--accent);
+  font: 0.82rem var(--mono);
+  text-align: end;
+  white-space: nowrap;
+}
+
+.demo-help {
+  margin-top: 0.65rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.geometry-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.geometry-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.geometry-tools button, .object-actions button {
+  min-height: 2.35rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #423752;
+  border-radius: 0.4rem;
+  background: #181422;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+:is(.geometry-tools, .object-actions) button:enabled { cursor: pointer; }
+:is(.geometry-tools, .object-actions) button:enabled:hover { background: #272035; }
+:is(.geometry-tools, .object-actions) button:disabled { opacity: 0.55; }
+
+.geometry-layout {
+  --view-height: clamp(16.5rem, 45vw, 28rem);
+  --frame-rail-width: clamp(10.5rem, 19cqi, 13rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "cloud" "objects" "frames";
+  gap: 0.85rem;
+}
+
+.geometry-screen {
+  grid-area: cloud;
+  background: radial-gradient(ellipse at 50% 61%, #231937, #0b0a12 71%);
+}
+
+.geometry-screen canvas {
+  display: block;
+  width: 100%;
+  height: var(--view-height);
+  outline: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.geometry-screen canvas:active { cursor: grabbing; }
+
+.geometry-objects { grid-area: objects; }
+
+.geometry-frames {
+  grid-area: frames;
+  block-size: min(24rem, 65vh);
+}
+
+.geometry-objects, .geometry-frames {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+}
+
+.object-heading, .object-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.object-heading { justify-content: space-between; }
+.object-heading h4, .geometry-frames h4 { margin: 0; font-size: 1rem; }
+.object-heading p { color: var(--muted); font-size: 0.875rem; }
+.object-actions { margin: 0.7rem 0 0.55rem; }
+
+.object-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  align-content: start;
+  gap: 0.2rem 0.4rem;
+  max-block-size: 11rem;
+  padding: 0.25rem;
+  overflow-y: auto;
+}
+
+.object-list label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 0.35rem;
+  color: #e1d6f6;
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.object-list code { font-family: var(--mono); }
+.object-list label:hover, .object-list label:focus-within { background: #252035; }
+
+.object-list input {
+  flex: 0 0 auto;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.marked-frame-list {
+  min-block-size: 0;
+  margin: 0.6rem 0 0;
+  padding: 0.25rem;
+  list-style: none;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+.marked-frame-list li {
+  position: relative;
+  aspect-ratio: 1296 / 968;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--background);
+}
+
+.marked-frame-list li + li { margin-block-start: 0.65rem; }
+
+.marked-frame-list img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.demo-tasks {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.9rem, 2.4vw, 1.5rem);
+}
+
+.demo-task {
+  min-width: 0;
+  padding: clamp(1rem, 2.55vw, 1.65rem);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--panel);
+}
+
+.demo-task > * { min-inline-size: 0; }
+
+.demo-task h4 {
+  display: block;
+  margin: 1.25rem 0 0.55rem;
+  color: #d0c5e9;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.demo-task > p, .reasoning-content {
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.reasoning-scroll {
+  max-block-size: 16rem;
+  overflow-y: auto;
+  padding-inline-end: 0.55rem;
+  scrollbar-gutter: stable;
+}
+
+.reasoning-scroll, .reasoning-code pre, .marked-frame-list { scrollbar-color: #806b9c #191423; }
+
+#editing-reasoning-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.25rem 0.65rem;
+}
+
+.reasoning-scroll-hint {
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+@container demo (min-width: 36rem) {
+  .geometry-layout {
+    grid-template-columns: var(--frame-rail-width) minmax(0, 1fr);
+    grid-template-areas: "frames cloud" "objects objects";
+  }
+
+  .geometry-frames { block-size: calc(var(--view-height) + 2px); }
+}
+
+@container demo (min-width: 52rem) {
+  .geometry-layout {
+    grid-template-columns: var(--frame-rail-width) minmax(0, 1fr) clamp(12.75rem, 25cqi, 16rem);
+    grid-template-areas: "frames cloud objects";
+  }
+
+  .geometry-objects { block-size: calc(var(--view-height) + 2px); }
+  .object-list { grid-template-columns: minmax(0, 1fr); max-block-size: none; }
+}
+
+@container demo (min-width: 42rem) {
+  .demo-tasks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  @supports (grid-template-rows: subgrid) {
+    .demo-tasks { row-gap: 0; }
+
+    .demo-task {
+      display: grid;
+      grid-row: span 7;
+      grid-template-rows: subgrid;
+      /* Keep wide code lines inside their scroller and out of column sizing. */
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .reasoning-scroll {
+      /* The shorter reasoning column sets this shared row's height. */
+      contain: size;
+      min-block-size: 9rem;
+      max-block-size: none;
+    }
+  }
+}
+
+.reasoning-tag, .reasoning-content code {
+  color: var(--accent);
+  font-family: var(--mono);
+}
+
+.reasoning-tag { font-size: 0.875rem; }
+
+.reasoning-code {
+  margin-top: 0.7rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--background);
+}
+
+.reasoning-code-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.reasoning-code pre {
+  margin: 0.45rem 0;
+  max-inline-size: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  font: 0.85rem/1.55 var(--mono);
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.reasoning-code pre code { color: var(--text); }
+.python-keyword { color: #c5a6ff; }
+.python-string { color: #abdfbe; }

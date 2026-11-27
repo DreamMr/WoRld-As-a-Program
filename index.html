@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08080d">
+  <meta name="description" content="WRAP turns objects in video into programmable 3D variables for multimodal spatial reasoning and scene editing.">
+  <title>WoRld As a Program | WRAP</title>
+  <link rel="stylesheet" href="./assets/styles.css">
+  <link rel="stylesheet" href="./assets/demo.css">
+  <script src="./assets/story.js" defer></script>
+  <script src="./assets/video-scrubber.js" defer></script>
+  <script src="./assets/demo-points.js" defer></script>
+  <script src="./assets/point-viewer.js" defer></script>
+  <script src="./assets/marked-frames.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="wordmark" href="#top">
+        <img class="wordmark-logo" src="./logo.png" alt="" width="32" height="32">
+        WRAP
+      </a>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="paper-title">
+      <div class="hero-copy">
+        <h1 id="paper-title" aria-label="WoRld As a Program: Programmable Spatial Reasoning for Multimodal LLMs">
+          <span>WoRld As a Program<span class="visually-hidden">:</span></span>
+          <span class="subtitle">Programmable Spatial Reasoning for Multimodal LLMs</span>
+        </h1>
+        <div class="hero-resources" role="group" aria-label="Project resources">
+          <button class="resource-button" type="button" disabled>
+            <span>Paper</span>
+            <span class="resource-status">Coming Soon</span>
+          </button>
+          <button class="resource-button" type="button" disabled>
+            <span>Code</span>
+            <span class="resource-status">Coming Soon</span>
+          </button>
+          <button class="resource-button" type="button" disabled>
+            <span>Dataset</span>
+            <span class="resource-status">Coming Soon</span>
+          </button>
+        </div>
+      </div>
+
+      <figure class="hero-figure">
+        <img src="./logo.png" alt="WRAP logo showing objects in a room linked to code" width="1254" height="1254">
+      </figure>
+
+      <a class="explore-link" href="#overview">
+        <span class="scroll-mark" aria-hidden="true"></span>
+        Explore the project
+      </a>
+    </section>
+
+    <div class="story">
+      <section class="story-card overview-card" id="overview" aria-labelledby="overview-title">
+        <div class="card-heading">
+          <p class="section-label">Overview</p>
+          <h2 id="overview-title">Programmable 3D worlds from video</h2>
+        </div>
+        <div class="overview-copy">
+          <p><strong>WRAP</strong> transforms videos into programmable 3D worlds, enabling multimodal large language models (MLLMs) to reason about and manipulate 3D scenes.</p>
+          <p>By grounding visual objects into persistent 3D variables, WRAP allows MLLMs to dynamically generate and execute programs for flexible geometric computations, supporting both video spatial reasoning and 3D scene editing.</p>
+        </div>
+      </section>
+
+      <div class="section-anchor" id="demo"></div>
+      <section class="story-card demo-card" aria-labelledby="demo-title">
+        <div class="card-heading">
+          <p class="section-label">Demo</p>
+          <h2 id="demo-title">Explore a 3D scene</h2>
+        </div>
+        <section class="demo-source" aria-labelledby="source-title">
+          <h3 id="source-title">Input video</h3>
+          <div class="frame-player" data-fps="30" data-frames="291">
+            <div class="frame-screen" tabindex="0" role="group" aria-label="Input video frame viewer" aria-describedby="source-help">
+              <video src="./color_320-610.mp4" preload="metadata" width="1296" height="968" muted playsinline></video>
+              <p class="frame-status" role="status" hidden></p>
+            </div>
+            <div class="frame-controls">
+              <input id="source-frame" type="range" min="1" max="291" value="1" aria-label="Input video frame" disabled>
+              <output for="source-frame" aria-live="off">1 / 291</output>
+            </div>
+            <p class="demo-help" id="source-help">Drag the timeline, or click the video and scroll to step through its frames.</p>
+          </div>
+        </section>
+
+        <section class="demo-geometry" aria-labelledby="geometry-title">
+          <div class="geometry-heading">
+            <h3 id="geometry-title">Tagged Video & 3D object point clouds</h3>
+            <div class="geometry-tools">
+              <button type="button" data-zoom="out" aria-label="Zoom out" disabled>−</button>
+              <button type="button" data-zoom="in" aria-label="Zoom in" disabled>+</button>
+              <button type="button" id="geometry-fit" disabled>Fit selection</button>
+              <button type="button" id="geometry-reset" disabled>Reset view</button>
+            </div>
+          </div>
+          <div class="geometry-layout">
+            <div class="geometry-screen">
+              <canvas id="geometry-canvas" tabindex="0" aria-label="Rotatable 3D reconstruction" aria-describedby="geometry-help"></canvas>
+              <p id="geometry-status" role="status">Loading point clouds…</p>
+            </div>
+            <section class="geometry-objects" aria-labelledby="object-title">
+              <div class="object-heading">
+                <h4 id="object-title">Objects</h4>
+                <p id="geometry-count" role="status"></p>
+              </div>
+              <div class="object-actions">
+                <button type="button" id="object-select-all" disabled>Select all</button>
+                <button type="button" id="object-clear-all" disabled>Clear all</button>
+              </div>
+              <div id="geometry-objects" class="object-list" role="group" aria-label="Visible objects"></div>
+            </section>
+            <section class="geometry-frames" aria-labelledby="marked-frames-title">
+              <h4 id="marked-frames-title">Tagged Video</h4>
+              <ol id="marked-frame-list" class="marked-frame-list" role="list" aria-label="Marked frame sequence" tabindex="0" start="320" data-last="610"></ol>
+            </section>
+          </div>
+          <p class="demo-help" id="geometry-help">Drag to orbit, or focus the view and use the arrow keys. Check the objects you want to see together.</p>
+        </section>
+
+        <div class="demo-tasks">
+          <section class="demo-task" aria-labelledby="reasoning-title">
+            <h3 id="reasoning-title">Spatial Reasoning</h3>
+            <h4>Prompt</h4>
+            <p id="reasoning-task">How far is the desk from the Sofa?</p>
+            <h4>Reasoning</h4>
+            <div id="reasoning-steps" class="reasoning-content">
+              <p><span class="reasoning-tag">&lt;think&gt;</span> The desk is <code>OBJECT_3</code> and Sofa is <code>OBJECT_5</code>. I will write python code to calculate the closest-point distance. <span class="reasoning-tag">&lt;/think&gt;</span></p>
+              <div class="reasoning-code">
+                <div class="reasoning-code-header"><span class="reasoning-tag">&lt;code&gt;</span><span>Python</span></div>
+                <pre tabindex="0" role="region" aria-label="Spatial reasoning Python code"><code><span class="python-keyword">from</span> scipy.spatial <span class="python-keyword">import</span> cKDTree
+d, _ = cKDTree(OBJECT_3).query(OBJECT_5, k=1)
+print(<span class="python-string">f"Disntace {float(d.min())}"</span>)</code></pre>
+                <span class="reasoning-tag">&lt;/code&gt;</span>
+              </div>
+            </div>
+            <h4>Result</h4>
+            <p id="reasoning-result">Distance 1.2</p>
+          </section>
+          <section class="demo-task" aria-labelledby="editing-title">
+            <h3 id="editing-title">Scene Editing</h3>
+            <h4>Prompt</h4>
+            <p id="editing-task">I want to swap the desk and chair with the Sofa and turn them around so they face the right way.</p>
+            <h4 id="editing-reasoning-title">Reasoning <span class="reasoning-scroll-hint" aria-hidden="true">Scroll to read</span></h4>
+            <div id="editing-steps" class="reasoning-content reasoning-scroll" tabindex="0" role="region" aria-labelledby="editing-reasoning-title">
+              <p><span class="reasoning-tag">&lt;think&gt;</span> The desk is <code>OBJECT_3</code>, the sofa is <code>OBJECT_5</code>, and the chair is <code>OBJECT_13</code>. Wait, I notice an accompanying object (<code>OBJECT_26</code>) near the desk. I need to move it together with the desk during the swap.  I will swap their positions and rotate them by 180&deg; around the <var>Z</var> axis. <span class="reasoning-tag">&lt;/think&gt;</span></p>
+              <div class="reasoning-code">
+                <div class="reasoning-code-header"><span class="reasoning-tag">&lt;code&gt;</span><span>Python</span></div>
+                <pre tabindex="0" role="region" aria-label="Scene editing Python code"><code><span class="python-keyword">from</span> pathlib <span class="python-keyword">import</span> Path
+<span class="python-keyword">import</span> ctypes, subprocess, sys
+<span class="python-keyword">import</span> cv2
+<span class="python-keyword">import</span> numpy <span class="python-keyword">as</span> np
+<span class="python-keyword">from</span> scipy.spatial <span class="python-keyword">import</span> Delaunay
+
+root = Path(<span class="python-string">&#x27;./demo&#x27;</span>)
+out = root / <span class="python-string">&#x27;demo_complete_output&#x27;</span>
+out.mkdir(exist_ok=<span class="python-keyword">True</span>)
+# Process all RGB frames; filter this list if a subset is needed.
+frames = sorted((root/<span class="python-string">&#x27;color&#x27;</span>).glob(<span class="python-string">&#x27;*.jpg&#x27;</span>), key=<span class="python-keyword">lambda</span> p: int(p.stem))
+ids = (3, 5, 13, 26)
+objects = {3: OBJECT_3, 5: OBJECT_5, 13: OBJECT_13, 26: OBJECT_26}
+group = np.concatenate([objects[i][:,:2] <span class="python-keyword">for</span> i <span class="python-keyword">in</span> (3,13,26)])
+sofa = objects[5][:,:2]
+group_center = (group.min(0).astype(np.float64)+group.max(0))/2
+sofa_center = (sofa.min(0).astype(np.float64)+sofa.max(0))/2
+moved = {}
+<span class="python-keyword">for</span> i <span class="python-keyword">in</span> ids:
+    a = objects[i]; b = a.copy()
+    source, target = (sofa_center, group_center) <span class="python-keyword">if</span> i == 5 <span class="python-keyword">else</span> (group_center, sofa_center)
+    b[:,:2] = target - (a[:,:2].astype(np.float64)-source)
+    moved[i] = b
+<span class="python-keyword">with</span> (root/<span class="python-string">&#x27;scene.ply&#x27;</span>).open(<span class="python-string">&#x27;rb&#x27;</span>) <span class="python-keyword">as</span> f:
+    n = <span class="python-keyword">None</span>
+    <span class="python-keyword">while</span> <span class="python-keyword">True</span>:
+        line = f.readline().decode(<span class="python-string">&#x27;ascii&#x27;</span>).strip()
+        <span class="python-keyword">if</span> line.startswith(<span class="python-string">&#x27;element vertex &#x27;</span>): n = int(line.split()[-1])
+        <span class="python-keyword">if</span> line == <span class="python-string">&#x27;end_header&#x27;</span>: <span class="python-keyword">break</span>
+    vertices = np.fromfile(f, dtype=[(<span class="python-string">&#x27;x&#x27;</span>,<span class="python-string">&#x27;&lt;f4&#x27;</span>),(<span class="python-string">&#x27;y&#x27;</span>,<span class="python-string">&#x27;&lt;f4&#x27;</span>),(<span class="python-string">&#x27;z&#x27;</span>,<span class="python-string">&#x27;&lt;f4&#x27;</span>),(<span class="python-string">&#x27;r&#x27;</span>,<span class="python-string">&#x27;u1&#x27;</span>),(<span class="python-string">&#x27;g&#x27;</span>,<span class="python-string">&#x27;u1&#x27;</span>),(<span class="python-string">&#x27;b&#x27;</span>,<span class="python-string">&#x27;u1&#x27;</span>),(<span class="python-string">&#x27;a&#x27;</span>,<span class="python-string">&#x27;u1&#x27;</span>)], count=n)
+    faces = np.fromfile(f, dtype=[(<span class="python-string">&#x27;n&#x27;</span>,<span class="python-string">&#x27;u1&#x27;</span>),(<span class="python-string">&#x27;index&#x27;</span>,<span class="python-string">&#x27;&lt;i4&#x27;</span>,(3,))])
+<span class="python-keyword">if</span> <span class="python-keyword">not</span> np.all(faces[<span class="python-string">&#x27;n&#x27;</span>]==3): <span class="python-keyword">raise</span> ValueError(<span class="python-string">&#x27;Expected triangular mesh&#x27;</span>)
+xyz = np.stack([vertices[k] <span class="python-keyword">for</span> k <span class="python-keyword">in</span> <span class="python-string">&#x27;xyz&#x27;</span>],axis=1)
+lookup = {tuple(x): i <span class="python-keyword">for</span> i,x <span class="python-keyword">in</span> enumerate(xyz)}
+geometry = []
+<span class="python-keyword">for</span> i <span class="python-keyword">in</span> ids:
+    a = objects[i]; indices = np.array([lookup[tuple(x)] <span class="python-keyword">for</span> x <span class="python-keyword">in</span> a[:,:3]],np.int32)
+    local = np.full(n,-1,np.int32); local[indices] = np.arange(len(indices))
+    triangles = local[faces[<span class="python-string">&#x27;index&#x27;</span>]]; triangles = triangles[np.all(triangles&gt;=0,axis=1)]
+    <span class="python-keyword">if</span> i == 3:
+        selected = np.flatnonzero((a[:,2]&gt;=.73)&amp;(a[:,2]&lt;=.77))
+        _, unique = np.unique(a[selected,:2],axis=0,return_index=<span class="python-keyword">True</span>)
+        selected = selected[unique]
+        extra = selected[Delaunay(a[selected,:2]).simplices]
+        xy = a[extra,:2]
+        lengths = np.max(np.linalg.norm(xy-np.roll(xy,1,axis=1),axis=2),axis=1)
+        triangles = np.concatenate([triangles, extra[lengths&lt;.55]],axis=0)
+    colors = np.clip(np.rint(a[:,3:6][:,::-1]),0,255).astype(np.uint8)
+    geometry.append((np.ascontiguousarray(a[:,:3]),np.ascontiguousarray(moved[i][:,:3]),np.ascontiguousarray(colors),np.ascontiguousarray(triangles,dtype=np.int32)))
+
+cpp_source = <span class="python-string">r&#x27;&#x27;&#x27;
+#include &lt;cmath&gt;
+#include &lt;cstdint&gt;
+#include &lt;algorithm&gt;
+#include &lt;limits&gt;
+extern &quot;C&quot; void raster(const float* xyz, const unsigned char* rgb, const int32_t* faces, int count, int w, int h, float fx,float fy,float cx,float cy, float* zbuf, unsigned char* out) {
+ for(int f=0;f&lt;count;f++) {
+  const int32_t* t=faces+3*f; float X[3],Y[3],Z[3],u[3],v[3]; bool ok=true;
+  for(int i=0;i&lt;3;i++){ int j=t[i]; X[i]=xyz[j*3]; Y[i]=xyz[j*3+1]; Z[i]=xyz[j*3+2]; if(Z[i]&lt;=0.05f||!std::isfinite(Z[i])){ok=false;break;} u[i]=fx*X[i]/Z[i]+cx;v[i]=fy*Y[i]/Z[i]+cy; }
+  if(!ok) continue;
+  float xmin=std::min({u[0],u[1],u[2]}),xmax=std::max({u[0],u[1],u[2]}); float ymin=std::min({v[0],v[1],v[2]}),ymax=std::max({v[0],v[1],v[2]});
+  if(xmax&lt;0||ymax&lt;0||xmin&gt;=w||ymin&gt;=h)continue;
+  int x0=std::max(0,(int)std::floor(xmin)), x1=std::min(w-1,(int)std::ceil(xmax)); int y0=std::max(0,(int)std::floor(ymin)),y1=std::min(h-1,(int)std::ceil(ymax));
+  float den=(v[1]-v[2])*(u[0]-u[2])+(u[2]-u[1])*(v[0]-v[2]); if(std::abs(den)&lt;1e-8f)continue;
+  for(int y=y0;y&lt;=y1;y++)for(int x=x0;x&lt;=x1;x++){
+   float a=((v[1]-v[2])*(x-u[2])+(u[2]-u[1])*(y-v[2]))/den;
+   float b=((v[2]-v[0])*(x-u[2])+(u[0]-u[2])*(y-v[2]))/den; float c=1-a-b;
+   if(a &lt; -1e-5f||b &lt; -1e-5f||c &lt; -1e-5f) continue;
+   float iz=a/Z[0]+b/Z[1]+c/Z[2]; if(iz&lt;=0)continue;float depth=1/iz;int p=y*w+x; if(depth&gt;=zbuf[p])continue; zbuf[p]=depth;
+   float wa=(a/Z[0])*depth, wb=(b/Z[1])*depth, wc=(c/Z[2])*depth;
+   for(int k=0;k&lt;3;k++)out[p*3+k]=(unsigned char)std::clamp((int)std::lround(wa*rgb[3*t[0]+k]+wb*rgb[3*t[1]+k]+wc*rgb[3*t[2]+k]),0,255);
+  }
+ }
+}
+
+&#x27;&#x27;&#x27;</span>
+source = out/<span class="python-string">&#x27;raster.cpp&#x27;</span>; library_path = out/<span class="python-string">&#x27;raster.dylib&#x27;</span>
+source.write_text(cpp_source)
+subprocess.run([<span class="python-string">&#x27;clang++&#x27;</span>,<span class="python-string">&#x27;-O3&#x27;</span>,<span class="python-string">&#x27;-std=c++17&#x27;</span>,<span class="python-string">&#x27;-shared&#x27;</span>,<span class="python-string">&#x27;-fPIC&#x27;</span>,str(source),<span class="python-string">&#x27;-o&#x27;</span>,str(library_path)],check=<span class="python-keyword">True</span>)
+lib = ctypes.CDLL(str(library_path)); raster = lib.raster
+raster.argtypes = [ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_float,ctypes.c_float,ctypes.c_float,ctypes.c_float,ctypes.c_void_p,ctypes.c_void_p]
+k = np.loadtxt(root/<span class="python-string">&#x27;intrinsic/intrinsic_color.txt&#x27;</span>); kd = np.loadtxt(root/<span class="python-string">&#x27;intrinsic/intrinsic_depth.txt&#x27;</span>)
+cv2.setNumThreads(1)
+<span class="python-keyword">for</span> number, path <span class="python-keyword">in</span> enumerate(frames,1):
+    name = path.stem
+    image = cv2.imread(str(path)); depth = cv2.imread(str(root/<span class="python-string">&#x27;depth&#x27;</span>/<span class="python-string">f&#x27;{name}.png&#x27;</span>),-1)
+    pose = np.loadtxt(root/<span class="python-string">&#x27;pose&#x27;</span>/<span class="python-string">f&#x27;{name}.txt&#x27;</span>)
+    <span class="python-keyword">if</span> image <span class="python-keyword">is</span> <span class="python-keyword">None</span> <span class="python-keyword">or</span> depth <span class="python-keyword">is</span> <span class="python-keyword">None</span>: <span class="python-keyword">raise</span> ValueError(<span class="python-string">f&#x27;Missing frame {name}&#x27;</span>)
+    <span class="python-keyword">if</span> pose.shape!=(4,4) <span class="python-keyword">or</span> <span class="python-keyword">not</span> np.isfinite(pose).all() <span class="python-keyword">or</span> abs(np.linalg.det(pose))&lt;1e-10:
+        cv2.imwrite(str(out/<span class="python-string">f&#x27;{name}.png&#x27;</span>),image); <span class="python-keyword">continue</span>
+    h,w=image.shape[:2]; transform=np.linalg.inv(pose)
+    u,v=np.meshgrid(np.arange(w,dtype=np.float32),np.arange(h,dtype=np.float32))
+    mapx=((u-k[0,2])*(kd[0,0]/k[0,0])+kd[0,2]).astype(np.float32)
+    mapy=((v-k[1,2])*(kd[1,1]/k[1,1])+kd[1,2]).astype(np.float32)
+    dm=cv2.remap(depth,mapx,mapy,cv2.INTER_NEAREST,borderMode=cv2.BORDER_CONSTANT).astype(np.float32)*.001
+    layers=[]
+    <span class="python-keyword">for</span> position <span class="python-keyword">in</span> (0,1):
+        z=np.full((h,w),np.inf,np.float32); rgb=np.zeros((h,w,3),np.uint8)
+        <span class="python-keyword">for</span> obj <span class="python-keyword">in</span> geometry:
+            camera=np.ascontiguousarray(obj[position]@transform[:3,:3].T+transform[:3,3],dtype=np.float32)
+            color,triangles=obj[2],obj[3]
+            raster(camera.ctypes.data,color.ctypes.data,triangles.ctypes.data,len(triangles),w,h,*map(float,(k[0,0],k[1,1],k[0,2],k[1,2])),z.ctypes.data,rgb.ctypes.data)
+        layers.append((z,rgb))
+    old_z=layers[0][0]; new_z,rgb=layers[1]
+    mask=(np.isfinite(old_z)&amp;((dm==0)|(old_z&lt;=dm+.22))).astype(np.uint8)
+    mask=cv2.dilate(mask,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5)))
+    mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,cv2.getStructuringElement(cv2.MORPH_RECT,(151,151)))
+    mask=cv2.dilate(mask,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(21,21)))
+    <span class="python-keyword">if</span> mask.any(): image=cv2.inpaint(image,mask*255,5,cv2.INPAINT_TELEA)
+    valid=np.isfinite(new_z)&amp;((dm==0)|(mask!=0)|(new_z&lt;=dm+.05))
+    <span class="python-keyword">if</span> valid.any():
+        closed=cv2.morphologyEx(valid.astype(np.uint8),cv2.MORPH_CLOSE,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(21,21)))
+        holes=(closed!=0)&amp;(~valid)
+        <span class="python-keyword">if</span> holes.any():
+            _, labels=cv2.distanceTransformWithLabels((~valid).astype(np.uint8),cv2.DIST_L2,5,labelType=cv2.DIST_LABEL_PIXEL)
+            yy,xx=np.nonzero(valid)
+            color_table=np.zeros((int(labels.max())+1,3),np.uint8); color_table[labels[yy,xx]]=rgb[yy,xx]
+            depth_table=np.zeros(len(color_table),np.float32); depth_table[labels[yy,xx]]=new_z[yy,xx]
+            holes &amp;= (dm==0)|(mask!=0)|(depth_table[labels]&lt;=dm+.05)
+            rgb[holes]=color_table[labels[holes]]; valid |= holes
+    image[valid]=rgb[valid]
+    <span class="python-keyword">if</span> <span class="python-keyword">not</span> cv2.imwrite(str(out/<span class="python-string">f&#x27;{name}.png&#x27;</span>),image): <span class="python-keyword">raise</span> RuntimeError(<span class="python-string">f&#x27;Cannot save {name}&#x27;</span>)
+    print(<span class="python-string">f&#x27;{number}/{len(frames)} {name}&#x27;</span>,flush=<span class="python-keyword">True</span>)</code></pre>
+                <span class="reasoning-tag">&lt;/code&gt;</span>
+              </div>
+            </div>
+            <h4>Result</h4>
+            <div class="frame-player" data-fps="30" data-frames="291">
+              <div class="frame-screen" tabindex="0" role="group" aria-label="Edited video frame viewer" aria-describedby="edited-help">
+                <video src="./edited_color_geometry_320-610.mp4" preload="metadata" width="1296" height="968" muted playsinline></video>
+                <p class="frame-status" role="status" hidden></p>
+              </div>
+              <div class="frame-controls">
+                <input id="edited-frame" type="range" min="1" max="291" value="1" aria-label="Edited video frame" disabled>
+                <output for="edited-frame" aria-live="off">1 / 291</output>
+              </div>
+              <p class="demo-help" id="edited-help">Drag the timeline, or click the video and scroll to step through its frames.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <div class="section-anchor" id="method"></div>
+      <section class="story-card method-card" aria-labelledby="method-title">
+        <div class="card-heading">
+          <p class="section-label">Method</p>
+          <h2 id="method-title">From video to executable 3D programs</h2>
+          <p>WRAP gives a multimodal language model a way to refer to objects it sees and compute directly on their 3D geometry.</p>
+        </div>
+
+        <div class="method-grid">
+          <article class="method-step">
+            <div class="step-visual binding-visual" aria-hidden="true">
+              <div class="video-frames"><i></i><i></i><i><b></b></i></div>
+              <span class="connector"></span>
+              <code class="var-tag">OBJECT_1</code>
+            </div>
+            <h3>Visual-Geometric Entity Binding</h3>
+            <p>WRAP builds object point clouds from video and links them to persistent visual IDs. Each ID resolves to a Grounded Variable.</p>
+          </article>
+          <article class="method-step">
+            <div class="step-visual activation-visual" aria-hidden="true">
+              <span>Clean video</span>
+              <span class="connector"></span>
+              <span class="tagged-frame">Tagged video</span>
+            </div>
+            <h3>Adaptive 3D Activation</h3>
+            <p>The model starts with untagged video and switches to tagged frames when it needs explicit 3D computation.</p>
+          </article>
+          <article class="method-step">
+            <div class="step-visual program-visual" aria-hidden="true">
+              <span class="prompt-mark">&gt;_</span>
+              <code>distance(<em>OBJECT_1</em>,<br><span class="code-indent"><em>OBJECT_2</em>)</span></code>
+            </div>
+            <h3>3D Program Reasoning</h3>
+            <p>The model selects the relevant variables and writes a task-specific program. The executor runs it to answer the question or update the scene.</p>
+          </article>
+        </div>
+      </section>
+
+      <div class="section-anchor" id="results"></div>
+      <section class="story-card results-card" aria-labelledby="results-title">
+        <div class="card-heading">
+          <p class="section-label">Results</p>
+          <h2 id="results-title">Spatial reasoning and scene editing</h2>
+        </div>
+        <div class="results-grid">
+          <article class="result">
+            <h3>ReVSI</h3>
+            <p class="metric">66.1<span>%</span></p>
+            <p class="metric-label">Average score · WRAP 9B</p>
+            <p>5.2 percentage points above Gemini 3 Pro in the reported comparison.</p>
+          </article>
+          <article class="result">
+            <h3>VSI-Bench</h3>
+            <p class="metric">69.5<span>%</span></p>
+            <p class="metric-label">Average score · WRAP 9B</p>
+            <p>Includes numerical and multiple-choice questions on video spatial reasoning.</p>
+          </article>
+          <article class="result">
+            <h3>EditRoom-DB</h3>
+            <p class="metric">0.5889</p>
+            <p class="metric-label">Edit-IoU · WRAP 9B</p>
+            <p>Edit-IoU measures overlap on edited objects. The EditRoom baseline scores 0.3236.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="back-link" href="#top">Back to top</a>
+    </div>
+  </footer>
+</body>
+</html>
